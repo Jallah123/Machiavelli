@@ -96,12 +96,11 @@ void consume_command() // runs in its own thread
 	}
 }
 
-void handle_client(shared_ptr<Socket> client) // this function runs in a separate thread
+void handle_client(shared_ptr<Socket> client, GameController& gameController) // this function runs in a separate thread
 {
 	try {
-
 		shared_ptr<Player> player = initializeNewPlayer(client);
-
+		gameController.addPlayer(player);
 		while (true) { // game loop
 			try {
 				// read first line of request
@@ -155,12 +154,16 @@ int main(int argc, const char * argv[])
 		try {
 			while (true) {
 				// wait for connection from client; will create new socket
-				cerr << "server listening" << '\n';
-				unique_ptr<Socket> client{ server.accept() };
+				while (gameController.getState() == INITIALIZING)
+				{
+					cerr << "server listening" << '\n';
+					unique_ptr<Socket> client{ server.accept() };
+					
+					// communicate with client over new socket in separate thread
+					thread handler{ handle_client, move(client) };
+					handlers.push_back(move(handler));
+				}
 
-				// communicate with client over new socket in separate thread
-				thread handler{ handle_client, move(client) };
-				handlers.push_back(move(handler));
 			}
 		}
 		catch (const exception& ex) {

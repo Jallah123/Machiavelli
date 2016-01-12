@@ -3,7 +3,7 @@
 
 GameController::GameController()
 {
-	currentState = GameState::INITIALIZING;
+	currentState = INITIALIZING;
 	createBuildingCards();
 	createCharacterCards();
 }
