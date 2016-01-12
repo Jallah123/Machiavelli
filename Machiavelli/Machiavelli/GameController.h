@@ -18,6 +18,8 @@ public:
 		}
 	}
 	GameState& getState() { return currentState; };
+	unique_ptr<CharacterCard> chooseCharacterCard(int card);
+	unique_ptr<BuildingCard> takeCard();
 private:
 	vector<unique_ptr<CharacterCard>> characterCards;
 	vector<unique_ptr<BuildingCard>> buildingCards;
@@ -25,4 +27,5 @@ private:
 	void createBuildingCards();
 	GameState currentState;
 	vector<shared_ptr<Player>> players;
+	shared_ptr<Player> getOldestPlayer();
 };

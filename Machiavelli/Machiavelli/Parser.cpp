@@ -5,16 +5,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
-
-vector<string> &Parser::split(const string &s, char delim, vector<string> &elems)
-{
-	stringstream ss(s);
-	string item;
-	while (getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-	return elems;
-}
+#include "Utility.h"
 
 vector<vector<string>> Parser::Parse(string textfile)
 {
@@ -27,7 +18,7 @@ vector<vector<string>> Parser::Parse(string textfile)
 			continue;
 		}
 		vector<string> elements{};
-		split(line, ';', elements);
+		Utility::split(line, ';', elements);
 		result.push_back(elements);
 	}
 	return result;
