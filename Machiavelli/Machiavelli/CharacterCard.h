@@ -22,6 +22,8 @@ protected:
 	int id;
 	bool alive = true;
 	bool robbed = false;
+	bool ActionDone = false;
+	bool GoldReceived = false;
 	int maxBuildings = 1;
 	shared_ptr<Player> owner;
 	shared_ptr<GameController> game;

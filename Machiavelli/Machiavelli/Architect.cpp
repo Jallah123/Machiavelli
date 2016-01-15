@@ -11,6 +11,7 @@ void Architect::Action()
 {
 	owner->AddCardToHand(game->takeCard());
 	owner->AddCardToHand(game->takeCard());
+	ActionDone = true;
 }
 
 Architect::~Architect()

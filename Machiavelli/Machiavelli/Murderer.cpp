@@ -25,6 +25,7 @@ void Murderer::Action()
 		number = stoi(line);
 	}
 	game->getCharacters().at(number)->Kill();
+	ActionDone = true;
 }
 
 Murderer::~Murderer()

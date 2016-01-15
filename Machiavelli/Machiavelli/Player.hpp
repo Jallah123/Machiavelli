@@ -33,6 +33,7 @@ public:
 	void AddCardToHand(shared_ptr<BuildingCard> card) { handCards.push_back(card); };
 	void AddGold(int amount) { gold += amount; };
 	void Remove(int amount) { gold -= amount; };
+	int GetGold() { return gold; };
 private:
 	std::string name;
 	tm age;

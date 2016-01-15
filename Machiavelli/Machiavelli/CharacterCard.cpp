@@ -11,4 +11,5 @@ void CharacterCard::GetGoldForBuildings()
 			owner->AddGold(1);
 		}
 	}
+	GoldReceived = true;
 }

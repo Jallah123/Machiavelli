@@ -26,6 +26,7 @@ void Thief::Action()
 		number = stoi(line);
 	}
 	game->getCharacters().at(number)->Rob();
+	ActionDone = true;
 }
 
 Thief::~Thief()

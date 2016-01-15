@@ -7,6 +7,7 @@ Preacher::Preacher(int _id, string _name, ColorEnum _color, shared_ptr<GameContr
 void Preacher::Action()
 {
 	GetGoldForBuildings();
+	ActionDone = true;
 }
 
 Preacher::~Preacher()

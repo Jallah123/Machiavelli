@@ -14,6 +14,7 @@ void Merchant::BeginTurn()
 void Merchant::Action()
 {
 	GetGoldForBuildings();
+	ActionDone = true;
 }
 
 Merchant::~Merchant()

@@ -34,6 +34,7 @@ void Mage::Action()
 	{
 		DiscardCards();
 	}
+	ActionDone = true;
 }
 
 void Mage::SwapCards()
