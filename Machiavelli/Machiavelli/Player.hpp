@@ -12,24 +12,23 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "CharacterCard.h"
-#include "BuildingCard.h"
+#include "Card.h"
 
 class Player {
 public:
-	Player(const std::string& name, const int& day, const int& month, const int& year, shared_ptr<Socket> _socket) : name{ name }, socket(_socket) { age.tm_mday = day; age.tm_mon = month; age.tm_year = year; }
+	Player() {}
+	Player(const std::string& name, const int& day, const int& month, const int& year) : name{ name } { age.tm_mday = day; age.tm_mon = month; age.tm_year = year; }
 
 	std::string getName() const { return name; }
 	void setName(const std::string& new_name) { name = new_name; }
-	Socket& GetSocket() { return *socket.get(); };
+
 	tm getAge() { return age; };
 private:
 	std::string name;
 	tm age;
-	std::vector<std::unique_ptr<CharacterCard>> characterCards;
-	std::vector<std::unique_ptr<BuildingCard>> playedCards;
-	std::vector<std::unique_ptr<BuildingCard>> handCards;
-	shared_ptr<Socket> socket;
+	std::vector<std::unique_ptr<Card>> characterCards;
+	std::vector<std::unique_ptr<Card>> playedCards;
+	std::vector<std::unique_ptr<Card>> handCards;
 };
 
 #endif /* Player_hpp */
