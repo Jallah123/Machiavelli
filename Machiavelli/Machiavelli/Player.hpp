@@ -30,6 +30,7 @@ public:
 	void SetHand(vector<shared_ptr<BuildingCard>> newHand) { handCards = newHand; };
 	void DeleteFromHand(vector<shared_ptr<BuildingCard>> cards);
 	vector<shared_ptr<BuildingCard>> GetPlayedCards() { return playedCards; };
+	void AddCardToHand(shared_ptr<BuildingCard> card) { handCards.push_back(card); };
 	void AddGold(int amount) { gold += amount; };
 	void Remove(int amount) { gold -= amount; };
 private:
