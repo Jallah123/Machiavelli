@@ -18,14 +18,17 @@ public:
 		}
 	}
 	GameState& getState() { return currentState; };
-	unique_ptr<CharacterCard> chooseCharacterCard(int card);
-	unique_ptr<BuildingCard> takeCard();
+	shared_ptr<CharacterCard> chooseCharacterCard(int card);
+	shared_ptr<BuildingCard> takeCard();
+	vector<shared_ptr<CharacterCard>> getCharacters() { return characterCards; };
 private:
-	vector<unique_ptr<CharacterCard>> characterCards;
-	vector<unique_ptr<BuildingCard>> buildingCards;
+	vector<shared_ptr<CharacterCard>> characterCards;
+	vector<shared_ptr<BuildingCard>> buildingCards;
 	void createCharacterCards();
 	void createBuildingCards();
 	GameState currentState;
 	vector<shared_ptr<Player>> players;
+	shared_ptr<Player> King;
+	shared_ptr<Player> NewKing;
 	shared_ptr<Player> getOldestPlayer();
 };
