@@ -19,7 +19,7 @@ public:
 	}
 	GameState& getState() { return currentState; };
 	shared_ptr<CharacterCard> chooseCharacterCard(int card);
-	shared_ptr<BuildingCard> takeCard();
+	shared_ptr<BuildingCard> TakeCard();
 	vector<shared_ptr<CharacterCard>> getCharacters() { return characterCards; };
 	shared_ptr<Player> GetOtherPlayer(shared_ptr<Player> self) {
 		for each (auto& player in players)

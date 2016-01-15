@@ -146,18 +146,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Architect.cpp" />
     <ClCompile Include="BuildingCard.cpp" />
     <ClCompile Include="CardFactory.cpp" />
     <ClCompile Include="CharacterCard.cpp" />
     <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Merchant.cpp" />
+    <ClCompile Include="Murderer.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Preacher.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="Thief.cpp" />
     <ClCompile Include="throw.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="Warlord.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Architect.h" />
     <ClInclude Include="BuildingCard.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardFactory.h" />
@@ -166,12 +175,19 @@
     <ClInclude Include="ColorEnum.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="King.h" />
+    <ClInclude Include="Mage.h" />
+    <ClInclude Include="Merchant.h" />
+    <ClInclude Include="Murderer.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Preacher.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Sync_queue.h" />
+    <ClInclude Include="Thief.h" />
     <ClInclude Include="throw.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="Warlord.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="buildings.txt" />

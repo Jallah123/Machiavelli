@@ -7,7 +7,7 @@ GameController::GameController()
 {
 	currentState = INITIALIZING;
 	createBuildingCards();
-	createCharacterCards();
+	// createCharacterCards();
 }
 
 GameController::~GameController()
@@ -41,7 +41,7 @@ void GameController::SwapCards(shared_ptr<Player> p, vector<shared_ptr<BuildingC
 	vector<shared_ptr<BuildingCard>> newCards;
 	for (int i = 0; i < amountDiscarded; i++)
 	{
-		newCards.push_back(takeCard());
+		newCards.push_back(TakeCard());
 	}
 
 	for each (auto card in cards)
@@ -55,16 +55,16 @@ void GameController::createCharacterCards()
 	vector<vector<string>> characters = Parser::Parse("characters.txt");
 	for (auto &elements : characters)
 	{
-		characterCards.emplace_back(move(CardFactory::createCharacterCard(stoi(elements[0]), elements[1], ColorMap.at(elements[2]))));
+		// characterCards.emplace_back(move(CardFactory::createCharacterCard(stoi(elements[0]), elements[1], ColorMap.at(elements[2]))));
 	}
 }
-/*
-shared_ptr<BuildingCard> GameController::takeCard()
+
+shared_ptr<BuildingCard> GameController::TakeCard()
 {
 	int cardIndex = Utility::GetInstance()->RandomNumber(0, buildingCards.size()-1);
 	auto card = buildingCards.at(cardIndex);
-	buildingCards.erase(cardIndex);
-	return t;
+	buildingCards.erase(buildingCards.begin() + cardIndex);
+	return card;
 }
 
 shared_ptr<CharacterCard> GameController::chooseCharacterCard(int card)
@@ -75,4 +75,4 @@ shared_ptr<CharacterCard> GameController::chooseCharacterCard(int card)
 	}
 	return nullptr;
 }
-*/
+

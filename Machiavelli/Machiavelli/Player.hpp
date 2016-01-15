@@ -32,8 +32,9 @@ public:
 	vector<shared_ptr<BuildingCard>> GetPlayedCards() { return playedCards; };
 	void AddCardToHand(shared_ptr<BuildingCard> card) { handCards.push_back(card); };
 	void AddGold(int amount) { gold += amount; };
-	void Remove(int amount) { gold -= amount; };
+	void RemoveGold(int amount) { gold -= amount; };
 	int GetGold() { return gold; };
+	void DestroyBuilding(shared_ptr<BuildingCard> building) { playedCards.erase(find(playedCards.begin(), playedCards.end(), building)); };
 private:
 	std::string name;
 	tm age;

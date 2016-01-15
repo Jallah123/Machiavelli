@@ -9,8 +9,8 @@ Architect::Architect(int _id, string _name, ColorEnum _color, shared_ptr<GameCon
 
 void Architect::Action()
 {
-	owner->AddCardToHand(game->takeCard());
-	owner->AddCardToHand(game->takeCard());
+	owner->AddCardToHand(game->TakeCard());
+	owner->AddCardToHand(game->TakeCard());
 	ActionDone = true;
 }
 

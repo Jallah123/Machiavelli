@@ -15,6 +15,10 @@ void King::BeginTurn()
 	game->SetNewKing(owner);
 }
 
+void King::Action()
+{
+}
+
 King::~King()
 {
 }

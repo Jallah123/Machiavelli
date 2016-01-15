@@ -60,7 +60,7 @@ shared_ptr<Player> initializeNewPlayer(shared_ptr<Socket> client)
 		}
 	}
 
-	shared_ptr<Player> player{ new Player{ name, day, month, year } };
+	shared_ptr<Player> player{ new Player{ name, day, month, year, client } };
 
 	*client << "Welcome, " << name << ", have fun playing our game!\r\n" << machiavelli::prompt;
 	return player;

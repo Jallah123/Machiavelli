@@ -23,6 +23,10 @@ void Thief::Action()
 			socket.write(character->GetId() + ". " + stoi(character->GetName()));
 		}
 		string line = owner.get()->GetSocket().readline();
+		if (line == "cancel")
+		{
+			return;
+		}
 		number = stoi(line);
 	}
 	game->getCharacters().at(number)->Rob();

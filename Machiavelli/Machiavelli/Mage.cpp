@@ -24,6 +24,10 @@ void Mage::Action()
 	{
 		socket.write("Choose:\n1. Trade hand with other player.\n2. Discard cards and get new ones.");
 		string line = socket.readline();
+		if (line == "cancel")
+		{
+			return;
+		}
 		number = stoi(line);
 	}
 	if (number == 1)
@@ -59,10 +63,14 @@ void Mage::DiscardCards()
 
 	socket.write("\nPlease enter the cards you want to discard. (2,3,6)\n");
 	string line = socket.readline();
+	if (line == "cancel")
+	{
+		return;
+	}
 	vector<string> cardsSplit;
 	Utility::split(line, ',', cardsSplit);
 	vector<shared_ptr<BuildingCard>> cards;
-	for each (string& s in cardsSplit)
+	for each (auto s in cardsSplit)
 	{
 		cards.push_back(owner->GetHand().at(stoi(s)));
 	}

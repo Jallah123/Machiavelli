@@ -29,9 +29,18 @@ void Warlord::Action()
 			return;
 		}
 		int number = stoi(line);
+		
 		if (number < p->GetPlayedCards().size() && number >= 0)
 		{
-
+			if (p->GetGold() >= p->GetPlayedCards().at(number)->GetCost() - 1)
+			{
+				p->DestroyBuilding(p->GetPlayedCards().at(number));
+				p->RemoveGold(p->GetPlayedCards().at(number)->GetCost() - 1);
+			}
+			else {
+				socket.write("Too expensive.");
+				return;
+			}
 		}
 	}
 	ActionDone = true;
