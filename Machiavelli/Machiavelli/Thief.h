@@ -1,13 +1,12 @@
 #pragma once
 #include "CharacterCard.h"
-
-class Murderer :
+class Thief :
 	public CharacterCard
 {
 public:
-	Murderer(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	Thief(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
 	virtual void BeginTurn() {};
 	virtual void Action() override;
-	~Murderer();
+	~Thief();
 };
 

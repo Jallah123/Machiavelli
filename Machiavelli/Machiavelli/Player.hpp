@@ -14,6 +14,9 @@
 #include <memory>
 #include "CharacterCard.h"
 #include "BuildingCard.h"
+#include "Socket.h"
+
+using namespace std;
 
 class Player {
 public:
@@ -23,12 +26,15 @@ public:
 	void setName(const std::string& new_name) { name = new_name; }
 	Socket& GetSocket() { return *socket.get(); };
 	tm getAge() { return age; };
+	vector<shared_ptr<BuildingCard>> GetHand() { return handCards; };
+	void SetHand(vector<shared_ptr<BuildingCard>> newHand) { handCards = newHand; };
+	void DeleteFromHand(vector<shared_ptr<BuildingCard>> cards);
 private:
 	std::string name;
 	tm age;
-	std::vector<std::unique_ptr<CharacterCard>> characterCards;
-	std::vector<std::unique_ptr<BuildingCard>> playedCards;
-	std::vector<std::unique_ptr<BuildingCard>> handCards;
+	vector<shared_ptr<CharacterCard>> characterCards;
+	vector<shared_ptr<BuildingCard>> playedCards;
+	vector<shared_ptr<BuildingCard>> handCards;
 	shared_ptr<Socket> socket;
 };
 

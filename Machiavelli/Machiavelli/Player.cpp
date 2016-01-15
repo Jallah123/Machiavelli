@@ -7,5 +7,11 @@
 //
 
 #include "Player.hpp"
+#include <algorithm>
+
 using namespace std;
 
+void Player::DeleteFromHand(vector<shared_ptr<BuildingCard>> cards)
+{
+	handCards.erase(std::remove(cards.begin(), cards.end(), cards.size()), cards.end());
+}

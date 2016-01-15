@@ -35,6 +35,21 @@ void GameController::createBuildingCards()
 	}
 }
 
+void GameController::SwapCards(shared_ptr<Player> p, vector<shared_ptr<BuildingCard>> cards)
+{
+	int amountDiscarded = cards.size();
+	vector<shared_ptr<BuildingCard>> newCards;
+	for (int i = 0; i < amountDiscarded; i++)
+	{
+		newCards.push_back(takeCard());
+	}
+
+	for each (auto card in cards)
+	{
+		buildingCards.push_back(card);
+	}
+}
+
 void GameController::createCharacterCards()
 {
 	vector<vector<string>> characters = Parser::Parse("characters.txt");

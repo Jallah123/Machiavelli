@@ -21,6 +21,14 @@ public:
 	shared_ptr<CharacterCard> chooseCharacterCard(int card);
 	shared_ptr<BuildingCard> takeCard();
 	vector<shared_ptr<CharacterCard>> getCharacters() { return characterCards; };
+	shared_ptr<Player> GetOtherPlayer(shared_ptr<Player> self) {
+		for each (auto& player in players)
+		{
+			if (player != self)
+				return player;
+		}
+	};
+	void SwapCards(shared_ptr<Player> p, vector<shared_ptr<BuildingCard>> cards);
 private:
 	vector<shared_ptr<CharacterCard>> characterCards;
 	vector<shared_ptr<BuildingCard>> buildingCards;
