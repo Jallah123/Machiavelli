@@ -8,7 +8,5 @@ public:
 	virtual void BeginTurn() {};
 	virtual void Action() override;
 	~Architect();
-protected:
-	int maxBuildings = 3;
 };
 
