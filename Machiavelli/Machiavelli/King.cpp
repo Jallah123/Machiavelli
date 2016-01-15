@@ -11,21 +11,9 @@ King::King(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _
 
 void King::BeginTurn()
 {
+	GetGoldForBuildings();
 	game->SetNewKing(owner);
 }
-
-void King::Action()
-{
-	for each (auto& card in owner->GetPlayedCards())
-	{
-		if (card->GetColor() == GetColor())
-		{
-			owner->GetSocket().write("You receive 1 gold for .\n");
-			owner->AddGold(1);
-		}
-	}
-}
-
 
 King::~King()
 {

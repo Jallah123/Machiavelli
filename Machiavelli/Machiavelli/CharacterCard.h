@@ -11,6 +11,7 @@ public:
 	CharacterCard(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : Card(_name, _color), id(_id), game(_game) {};
 	virtual void BeginTurn() = 0;
 	virtual void Action() = 0;
+	void GetGoldForBuildings();
 	void SetOwner(shared_ptr<Player> p) { owner = p; };
 	int GetId() { return id; };
 	void Kill() { alive = false; };
