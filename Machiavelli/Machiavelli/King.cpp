@@ -1,0 +1,32 @@
+#include "King.h"
+#include "Player.hpp"
+#include "GameController.h"
+#include "Socket.h"
+#include "Utility.h"
+#include <string>
+
+King::King(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : CharacterCard(_id, _name, _color, _game)
+{
+}
+
+void King::BeginTurn()
+{
+	game->SetNewKing(owner);
+}
+
+void King::Action()
+{
+	for each (auto& card in owner->GetPlayedCards())
+	{
+		if (card->GetColor() == GetColor())
+		{
+			owner->GetSocket().write("You receive 1 gold for .\n");
+			owner->AddGold(1);
+		}
+	}
+}
+
+
+King::~King()
+{
+}

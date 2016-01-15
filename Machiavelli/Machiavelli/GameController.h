@@ -29,6 +29,7 @@ public:
 		}
 	};
 	void SwapCards(shared_ptr<Player> p, vector<shared_ptr<BuildingCard>> cards);
+	void SetNewKing(shared_ptr<Player> _NewKing) { NewKing = _NewKing; };
 private:
 	vector<shared_ptr<CharacterCard>> characterCards;
 	vector<shared_ptr<BuildingCard>> buildingCards;

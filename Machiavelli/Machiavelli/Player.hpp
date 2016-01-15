@@ -29,6 +29,9 @@ public:
 	vector<shared_ptr<BuildingCard>> GetHand() { return handCards; };
 	void SetHand(vector<shared_ptr<BuildingCard>> newHand) { handCards = newHand; };
 	void DeleteFromHand(vector<shared_ptr<BuildingCard>> cards);
+	vector<shared_ptr<BuildingCard>> GetPlayedCards() { return playedCards; };
+	void AddGold(int amount) { gold += amount; };
+	void Remove(int amount) { gold -= amount; };
 private:
 	std::string name;
 	tm age;
@@ -36,6 +39,7 @@ private:
 	vector<shared_ptr<BuildingCard>> playedCards;
 	vector<shared_ptr<BuildingCard>> handCards;
 	shared_ptr<Socket> socket;
+	int gold = 2;
 };
 
 #endif /* Player_hpp */
