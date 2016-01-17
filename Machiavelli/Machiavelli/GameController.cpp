@@ -10,12 +10,16 @@ GameController::GameController()
 	createCharacterCards();
 }
 
-GameController::~GameController()
+void GameController::addPlayer(shared_ptr<Player> player)
 {
-
+	players.push_back(player);
+	if (players.size() == 1)
+	{
+		currentState = SETUP;
+	}
 }
 
-shared_ptr<Player> GameController::getOldestPlayer()
+shared_ptr<Player> GameController::GetOldestPlayer()
 {
 	// Calculate oldest player
 	auto age = players.at(0).get()->getAge();
@@ -25,13 +29,87 @@ shared_ptr<Player> GameController::getOldestPlayer()
 	return (daysP1 <= daysP2) ? players.at(0) : players.at(1);
 }
 
-
 void GameController::createBuildingCards()
 {
 	vector<vector<string>> buildings = Parser::Parse("buildings.txt");
 	for (auto &elements : buildings)
 	{
 		buildingCards.emplace_back(CardFactory::Instance()->createBuildingCard(elements[0], ColorMap[elements[2]], stoi(elements[1])));
+	}
+}
+
+shared_ptr<Player> GameController::GetOtherPlayer(shared_ptr<Player> self)
+{
+	for each (auto& player in players)
+	{
+		if (player != self)
+			return player;
+	}
+}
+
+void GameController::GiveStartingResources()
+{
+	for (auto& player : players)
+	{
+		player->SetGold(2);
+		for (int i = 1; i <= 4; i++)
+		{
+			player->AddCardToHand(TakeCard());
+		}
+	}
+}
+
+void GameController::ChooseCharacters()
+{
+	// Discard random card
+	auto& card = RandomCard(characterCards);
+	card->Discard();
+	CurrentPlayer->GetSocket().write("Game discarded: " + card->GetName() + "\r\n");
+
+	// Let king pick a character
+	CurrentPlayer->ChooseCharacter();
+	CurrentPlayer = GetOtherPlayer(CurrentPlayer);
+
+	// Let others choose
+	bool done = false;
+	while (!done)
+	{		
+		CurrentPlayer->ChooseCharacter();
+		CurrentPlayer->DiscardCharacter();
+		CurrentPlayer = GetOtherPlayer(CurrentPlayer);
+		int count = 0;
+		for (auto& character: characterCards)
+		{
+			if (character->IsDiscarded() || character->GetOwner() != nullptr)
+			{
+				count++;
+			}
+		}
+		if (count == characterCards.size())
+		{
+			done = true;
+		}
+	}
+
+	// Picking cards is done, give starting resources
+	GiveStartingResources();
+	StartGame();
+}
+
+void GameController::StartGame()
+{
+	currentState = RUNNING;
+	while (currentState == RUNNING)
+	{
+
+	}
+}
+
+void GameController::HandleCommand(shared_ptr<Player> player, string cmd)
+{
+	if (cmd == "exit")
+	{
+		player->GetSocket().write("Bye!\r\n");
 	}
 }
 
@@ -61,9 +139,8 @@ void GameController::createCharacterCards()
 
 shared_ptr<BuildingCard> GameController::TakeCard()
 {
-	int cardIndex = Utility::GetInstance()->RandomNumber(0, buildingCards.size()-1);
-	auto card = buildingCards.at(cardIndex);
-	buildingCards.erase(buildingCards.begin() + cardIndex);
+	shared_ptr<BuildingCard> card = RandomCard(buildingCards);
+	buildingCards.erase(find(buildingCards.begin(), buildingCards.end(), card));
 	return card;
 }
 
@@ -74,4 +151,16 @@ shared_ptr<CharacterCard> GameController::chooseCharacterCard(int card)
 		return characterCards.at(card);
 	}
 	return nullptr;
+}
+
+shared_ptr<BuildingCard> GameController::RandomCard(vector<shared_ptr<BuildingCard>> cards)
+{
+	int cardIndex = Utility::GetInstance()->RandomNumber(0, cards.size() - 1);
+	return cards.at(cardIndex);
+}
+
+shared_ptr<CharacterCard> GameController::RandomCard(vector<shared_ptr<CharacterCard>> cards)
+{
+	int cardIndex = Utility::GetInstance()->RandomNumber(0, cards.size() - 1);
+	return cards.at(cardIndex);
 }

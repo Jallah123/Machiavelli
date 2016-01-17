@@ -20,19 +20,23 @@ public:
 	virtual void Action() = 0;
 	void GetGoldForBuildings();
 	void SetOwner(shared_ptr<Player> p) { owner = p; };
+	shared_ptr<Player> GetOwner() { return owner; };
 	int GetId() { return id; };
 	void Kill() { alive = false; };
 	void Rob() { robbed = true; };
+	void Discard() { discarded = true; };
 	bool IsAlive() { return alive; };
 	bool IsRobbed() { return robbed; };
+	bool IsDiscarded() { return discarded; };
 protected:
 	int id;
 	bool alive = true;
 	bool robbed = false;
 	bool ActionDone = false;
 	bool GoldReceived = false;
+	bool discarded = false; 
 	int maxBuildings = 1;
-	shared_ptr<Player> owner;
+	shared_ptr<Player> owner = nullptr;
 	shared_ptr<GameController> game;
 };
 

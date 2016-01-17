@@ -8,17 +8,120 @@
 
 #include "Player.hpp"
 #include <algorithm>
+#include "GameController.h"
+#include "CharacterCard.h"
 
 using namespace std;
 
 void Player::DeleteFromHand(vector<shared_ptr<BuildingCard>> cards)
 {
-	for (auto& card: cards)
+	for (auto& card : cards)
 	{
 		auto& it = find(handCards.begin(), handCards.end(), card);
 		if (it != handCards.end())
 		{
 			handCards.erase(it);
+		}
+	}
+}
+
+void Player::BuildBuilding(shared_ptr<BuildingCard> building)
+{
+	if (building->GetCost() > GetGold())
+	{
+		GetSocket().write("Not enough money.");
+		return;
+	}
+	RemoveGold(building->GetCost());
+	playedCards.push_back(building);
+	handCards.erase(find(handCards.begin(), handCards.end(), building));
+}
+
+void Player::DiscardCharacter()
+{
+	vector<shared_ptr<CharacterCard>> characters = game->getCharacters();
+	socket->write("Please discard a character:\r\n");
+	for (auto& character : characters)
+	{
+		if (!character->IsDiscarded() && character->GetOwner() == nullptr)
+		{
+			socket->write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
+		}
+	}
+	bool done = false;
+	while (!done)
+	{
+		if (lastCommand != "")
+		{
+			try
+			{
+				int choice = stoi(lastCommand);
+				for (auto& character : characters)
+				{
+					if (character->GetId() == choice)
+					{
+						if (!character->IsDiscarded() && character->GetOwner() == nullptr)
+						{
+							character->Discard();
+							done = true;
+						}
+						else
+						{
+							socket->write("Character already chosen or discarded");
+						}
+					}
+				}
+			}
+			catch (exception& e)
+			{
+				socket->write("Wrong number...");
+			}
+			ResetLastCommand();
+		}
+	}
+}
+
+void Player::ChooseCharacter()
+{
+	vector<shared_ptr<CharacterCard>> characters = game->getCharacters();
+	socket->write("Please pick a character:\r\n");
+	for (auto& character : characters)
+	{
+		if (!character->IsDiscarded() && character->GetOwner() == nullptr)
+		{
+			socket->write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
+		}
+	}
+	bool done = false;
+	while (!done)
+	{
+		if (lastCommand != "")
+		{
+			try
+			{
+				int choice = stoi(socket->readline());
+				for (auto& character : characters)
+				{
+					if (character->GetId() == choice)
+					{
+						if (!character->IsDiscarded() && character->GetOwner() == nullptr)
+						{
+							characterCards.push_back(character);
+							character->SetOwner(shared_ptr<Player>(this));
+							done = true;
+						}
+						else
+						{
+							socket->write("Character already chosen or discarded");
+						}
+					}
+				}
+			}
+			catch (exception& e)
+			{
+				socket->write("Wrong number...");
+			}
+			ResetLastCommand();
 		}
 	}
 }

@@ -3,6 +3,7 @@
 #include "GameController.h"
 #include "Socket.h"
 #include <string>
+#include "CharacterCard.h"
 
 void Murderer::Action()
 {
