@@ -2,11 +2,6 @@
 #include "Player.hpp"
 #include "GameController.h"
 
-Warlord::Warlord(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : CharacterCard(_id, _name, _color, _game)
-{
-}
-
-
 void Warlord::Action()
 {
 	GetGoldForBuildings();
@@ -44,8 +39,4 @@ void Warlord::Action()
 		}
 	}
 	ActionDone = true;
-}
-
-Warlord::~Warlord()
-{
 }

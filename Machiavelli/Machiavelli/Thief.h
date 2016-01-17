@@ -4,9 +4,9 @@ class Thief :
 	public CharacterCard
 {
 public:
-	Thief(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	Thief() {};
+	~Thief() {};
 	virtual void BeginTurn() {};
 	virtual void Action() override;
-	~Thief();
 };
 

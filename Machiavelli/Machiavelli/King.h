@@ -4,9 +4,9 @@ class King :
 	public CharacterCard
 {
 public:
-	King(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	King() {};
+	~King() {};
 	virtual void BeginTurn() override;
 	virtual void Action() override;
-	~King();
 };
 

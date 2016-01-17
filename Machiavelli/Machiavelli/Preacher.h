@@ -4,9 +4,9 @@ class Preacher :
 	public CharacterCard
 {
 public:
-	Preacher(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	Preacher() {};
+	~Preacher() {};
 	virtual void BeginTurn() {};
 	virtual void Action() override;
-	~Preacher();
 };
 

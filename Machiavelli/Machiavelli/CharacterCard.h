@@ -8,7 +8,14 @@ class CharacterCard :
 	public Card
 {
 public:
-	CharacterCard(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : Card(_name, _color), id(_id), game(_game) {};
+	CharacterCard() {};
+	void Initialize(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game)
+	{
+		id = _id;
+		name = _name;
+		color = _color;
+		game = _game;
+	}
 	virtual void BeginTurn() = 0;
 	virtual void Action() = 0;
 	void GetGoldForBuildings();

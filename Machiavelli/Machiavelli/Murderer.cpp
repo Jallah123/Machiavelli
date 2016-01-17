@@ -4,11 +4,6 @@
 #include "Socket.h"
 #include <string>
 
-Murderer::Murderer(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : CharacterCard(_id, _name, _color, _game)
-{
-}
-
-
 void Murderer::Action()
 {
 	// conversatie/kiezen
@@ -30,8 +25,4 @@ void Murderer::Action()
 	}
 	game->getCharacters().at(number)->Kill();
 	ActionDone = true;
-}
-
-Murderer::~Murderer()
-{
 }

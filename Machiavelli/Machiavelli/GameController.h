@@ -2,6 +2,7 @@
 #include "CardFactory.h"
 #include "GameState.h"
 #include "Player.hpp"
+#include "Card.h"
 
 class GameController
 {

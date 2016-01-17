@@ -4,9 +4,9 @@ class Architect :
 	public CharacterCard
 {
 public:
-	Architect(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	Architect() { maxBuildings = 3; };
+	~Architect() {};
 	virtual void BeginTurn() {};
 	virtual void Action() override;
-	~Architect();
 };
 

@@ -4,13 +4,6 @@
 #include "Socket.h"
 #include <string>
 
-
-
-Thief::Thief(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : CharacterCard(_id, _name, _color, _game)
-{
-}
-
-
 void Thief::Action()
 {
 	auto& socket = owner.get()->GetSocket();
@@ -31,8 +24,4 @@ void Thief::Action()
 	}
 	game->getCharacters().at(number)->Rob();
 	ActionDone = true;
-}
-
-Thief::~Thief()
-{
 }

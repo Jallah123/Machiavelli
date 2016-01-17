@@ -96,10 +96,10 @@
     <ClCompile Include="Merchant.cpp">
       <Filter>Source Files\Models\Characters</Filter>
     </ClCompile>
-    <ClCompile Include="Warlord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Architect.cpp">
+      <Filter>Source Files\Models\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Warlord.cpp">
       <Filter>Source Files\Models\Characters</Filter>
     </ClCompile>
   </ItemGroup>
@@ -168,7 +168,7 @@
       <Filter>Header Files\Models\Characters</Filter>
     </ClInclude>
     <ClInclude Include="Warlord.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Models\Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

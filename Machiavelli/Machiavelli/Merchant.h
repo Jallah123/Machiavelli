@@ -4,9 +4,9 @@ class Merchant :
 	public CharacterCard
 {
 public:
-	Merchant(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	Merchant() {};
+	~Merchant() {};
 	virtual void BeginTurn();
 	virtual void Action() override;
-	~Merchant();
 };
 

@@ -5,9 +5,9 @@ class Murderer :
 	public CharacterCard
 {
 public:
-	Murderer(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game);
+	Murderer() {};
+	~Murderer() {};
 	virtual void BeginTurn() {};
 	virtual void Action() override;
-	~Murderer();
 };
 

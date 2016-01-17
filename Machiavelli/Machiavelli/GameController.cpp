@@ -7,7 +7,7 @@ GameController::GameController()
 {
 	currentState = INITIALIZING;
 	createBuildingCards();
-	// createCharacterCards();
+	createCharacterCards();
 }
 
 GameController::~GameController()
@@ -31,7 +31,7 @@ void GameController::createBuildingCards()
 	vector<vector<string>> buildings = Parser::Parse("buildings.txt");
 	for (auto &elements : buildings)
 	{
-		buildingCards.emplace_back(move(CardFactory::createBuildingCard(elements[0], ColorMap[elements[2]], stoi(elements[1]))));
+		buildingCards.emplace_back(CardFactory::Instance()->createBuildingCard(elements[0], ColorMap[elements[2]], stoi(elements[1])));
 	}
 }
 
@@ -55,7 +55,7 @@ void GameController::createCharacterCards()
 	vector<vector<string>> characters = Parser::Parse("characters.txt");
 	for (auto &elements : characters)
 	{
-		// characterCards.emplace_back(move(CardFactory::createCharacterCard(stoi(elements[0]), elements[1], ColorMap.at(elements[2]))));
+		characterCards.emplace_back(CardFactory::Instance()->createCharacterCard(stoi(elements[0]), elements[1], ColorMap.at(elements[2]), shared_ptr<GameController>(this)));
 	}
 }
 
@@ -71,8 +71,7 @@ shared_ptr<CharacterCard> GameController::chooseCharacterCard(int card)
 {
 	if (card >= 0 && card < characterCards.size())
 	{
-		return move(characterCards.at(card));
+		return characterCards.at(card);
 	}
 	return nullptr;
 }
-

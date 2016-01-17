@@ -5,11 +5,6 @@
 #include "Utility.h"
 #include <string>
 
-Mage::Mage(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : CharacterCard(_id, _name, _color, _game)
-{
-}
-
-
 void Mage::Action()
 {
 	auto& socket = owner.get()->GetSocket();
@@ -76,8 +71,4 @@ void Mage::DiscardCards()
 	}
 	owner->DeleteFromHand(cards);
 	game->SwapCards(owner, cards);
-}
-
-Mage::~Mage()
-{
 }

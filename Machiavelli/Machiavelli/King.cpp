@@ -5,20 +5,10 @@
 #include "Utility.h"
 #include <string>
 
-King::King(int _id, string _name, ColorEnum _color, shared_ptr<GameController> _game) : CharacterCard(_id, _name, _color, _game)
-{
-}
+void King::Action(){ }
 
 void King::BeginTurn()
 {
 	GetGoldForBuildings();
 	game->SetNewKing(owner);
-}
-
-void King::Action()
-{
-}
-
-King::~King()
-{
 }

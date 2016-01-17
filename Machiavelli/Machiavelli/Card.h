@@ -7,6 +7,7 @@ using namespace std;
 class Card
 {
 public:
+	Card() {};
 	Card(string _name, ColorEnum _color) : name(_name), color(_color) {};
 	string GetName() { return name; };
 	string GetColor() {
