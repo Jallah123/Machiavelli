@@ -62,6 +62,7 @@ void GameController::GiveStartingResources()
 void GameController::ChooseCharacters()
 {
 	// Discard random card
+	CurrentPlayer->GetSocket().write("\u001B[2J");
 	auto& card = RandomCard(characterCards);
 	card->Discard();
 	CurrentPlayer->GetSocket().write("\r\nDiscarded card: " + card->GetName() + " \r\n");
