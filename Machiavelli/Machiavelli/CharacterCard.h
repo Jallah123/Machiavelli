@@ -18,6 +18,7 @@ public:
 	}
 	virtual void BeginTurn();
 	void PlayTurn();
+	void ShowActions(int& amountOfChoices);
 	void EndTurn();
 	virtual void Action() = 0;
 	void GetGoldForBuildings();

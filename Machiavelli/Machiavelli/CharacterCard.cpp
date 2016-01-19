@@ -22,21 +22,9 @@ void CharacterCard::BeginTurn()
 
 void CharacterCard::PlayTurn()
 {
+	int amountOfChoices;
+	ShowActions(amountOfChoices);
 	auto& socket = owner->GetSocket();
-	socket.write("Je bent nu de : " + name + "\r\n");
-	owner->ShowInfo();
-	socket.write("Maak een keuze : \r\n");
-	socket.write("0. Bekijk goud en gebouwen van de tegenstander.\r\n");
-	socket.write("1. Neem 2 goudstukken.\r\n");
-	socket.write("2. Neem 2 gebouwenkaarten en leg er 1 af.\r\n");
-	socket.write("3. Maak gebruik van de karaktereigenschap van de " + name + ".\r\n");
-	socket.write("4. Beeindig je beurt.\r\n");
-	int amountOfChoices = 4;
-	if (color != ColorEnum::NONE)
-	{
-		socket.write("5. Ontvang goudstukken voor gekleurde gebouwen.\r\n");
-		amountOfChoices++;
-	}
 	socket.write(machiavelli::prompt);
 	while (true)
 	{
@@ -67,6 +55,7 @@ void CharacterCard::PlayTurn()
 						GetGoldForBuildings();
 						break;
 					}
+					ShowActions(amountOfChoices);
 				}
 			}
 			catch (...)
@@ -76,6 +65,25 @@ void CharacterCard::PlayTurn()
 			}
 			socket.write(machiavelli::prompt);
 		}
+	}
+}
+
+void CharacterCard::ShowActions(int& amountOfChoices)
+{
+	auto& socket = owner->GetSocket();
+	socket.write("Je bent nu de : " + name + "\r\n");
+	owner->ShowInfo();
+	socket.write("Maak een keuze : \r\n");
+	socket.write("0. Bekijk goud en gebouwen van de tegenstander.\r\n");
+	socket.write("1. Neem 2 goudstukken.\r\n");
+	socket.write("2. Neem 2 gebouwenkaarten en leg er 1 af.\r\n");
+	socket.write("3. Maak gebruik van de karaktereigenschap van de " + name + ".\r\n");
+	socket.write("4. Beeindig je beurt.\r\n");
+	amountOfChoices = 4;
+	if (color != ColorEnum::NONE)
+	{
+		socket.write("5. Ontvang goudstukken voor gekleurde gebouwen.\r\n");
+		amountOfChoices++;
 	}
 }
 
@@ -91,8 +99,8 @@ void CharacterCard::GetTurnBuildings()
 	auto& card2 = game->TakeCard();
 	auto& socket = owner->GetSocket();
 	socket.write("Kies 1 van de 2 volgende : \r\n");
-	socket.write(card1->GetInfo());
-	socket.write(card2->GetInfo());
+	socket.write("0. " + card1->GetInfo());
+	socket.write("1. " + card2->GetInfo());
 	socket.write(machiavelli::prompt);
 	while (true)
 	{
