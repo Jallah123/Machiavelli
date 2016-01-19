@@ -102,6 +102,9 @@
     <ClCompile Include="Warlord.cpp">
       <Filter>Source Files\Models\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="SocketUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildingCard.h">
@@ -171,6 +174,9 @@
       <Filter>Header Files\Models\Characters</Filter>
     </ClInclude>
     <ClInclude Include="Machiavelli.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
