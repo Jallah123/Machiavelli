@@ -9,6 +9,6 @@ void King::Action(){ }
 
 void King::BeginTurn()
 {
-	GetGoldForBuildings();
+	CharacterCard::BeginTurn();
 	game->SetNewKing(owner);
 }
