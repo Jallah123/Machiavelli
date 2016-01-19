@@ -8,19 +8,31 @@ void Thief::Action()
 {
 	auto& socket = owner.get()->GetSocket();
 	int number = -1;
-	while (number == -1 && number < game->getCharacters().size() && number > 2) {
-		socket.write("Choose number you want to rob.");
+	while (true) {
+		socket.write("Choose number you want to rob.\r\n");
 		auto t = game->getCharacters();
 		for each (auto& character in t)
 		{
 			socket.write(character->GetId() + ". " + stoi(character->GetName()));
 		}
-		string line = owner.get()->GetSocket().readline();
+		socket.write(machiavelli::prompt);
+		string line = owner->GetLastCommand();
 		if (line == "cancel")
 		{
 			return;
 		}
-		number = stoi(line);
+		try
+		{
+			number = stoi(line);
+		}
+		catch (...)
+		{
+			socket.write("Je hebt geen nummer gekozen.\r\n");
+		}
+		if (number > 2 && number < game->getCharacters().size())
+		{
+			break;
+		}
 	}
 	game->getCharacters().at(number)->Rob();
 	ActionDone = true;
