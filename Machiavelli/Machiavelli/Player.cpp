@@ -48,6 +48,7 @@ void Player::DiscardCharacter()
 			socket->write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
 		}
 	}
+	socket->write(machiavelli::prompt);
 	bool done = false;
 	while (!done)
 	{
@@ -64,21 +65,55 @@ void Player::DiscardCharacter()
 						{
 							character->Discard();
 							done = true;
+							break;
 						}
 						else
 						{
-							socket->write("Character already chosen or discarded");
+							socket->write("Character already chosen or discarded.\r\n");
+							socket->write(machiavelli::prompt);
 						}
 					}
 				}
 			}
 			catch (exception& e)
 			{
-				socket->write("Wrong number...");
+				socket->write("Wrong number...\r\n");
+				socket->write(machiavelli::prompt);
 			}
 			ResetLastCommand();
 		}
 	}
+}
+
+void Player::ShowInfo()
+{
+	socket->write("Goud : " + to_string(gold) + "\r\n");
+	
+	socket->write("Gebouwen : \r\n");
+	for (auto& building : playedCards)
+	{
+		socket->write(building->GetInfo());
+	}
+	socket->write("\r\nHandkaarten : \r\n");
+	for (auto& building : handCards)
+	{
+		socket->write(building->GetInfo());
+	}
+	socket->write("\r\n");
+}
+
+string Player::GetInfo()
+{
+	string s = "";
+	s += "Goud : " + to_string(gold) + "\r\n";
+
+	s += "Gebouwen : \r\n";
+	for (auto& building : playedCards)
+	{
+		s += building->GetInfo();
+	}
+	s += "\r\n";
+	return s;
 }
 
 void Player::ChooseCharacter()
@@ -92,6 +127,7 @@ void Player::ChooseCharacter()
 			socket->write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
 		}
 	}
+	socket->write(machiavelli::prompt);
 	bool done = false;
 	while (!done)
 	{
@@ -99,7 +135,7 @@ void Player::ChooseCharacter()
 		{
 			try
 			{
-				int choice = stoi(socket->readline());
+				int choice = stoi(lastCommand);
 				for (auto& character : characters)
 				{
 					if (character->GetId() == choice)
@@ -112,16 +148,19 @@ void Player::ChooseCharacter()
 						}
 						else
 						{
-							socket->write("Character already chosen or discarded");
+							socket->write("Character already chosen or discarded.\r\n");
+							socket->write(machiavelli::prompt);
 						}
 					}
 				}
 			}
 			catch (exception& e)
 			{
-				socket->write("Wrong number...");
+				socket->write("Wrong number...\r\n");
+				socket->write(machiavelli::prompt);
 			}
 			ResetLastCommand();
 		}
 	}
+	socket->write("Waiting for other player ");
 }

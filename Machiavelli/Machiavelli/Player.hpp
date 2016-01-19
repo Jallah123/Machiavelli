@@ -49,6 +49,8 @@ public:
 	void ChooseCharacter();
 	void DiscardCharacter();
 	void ResetLastCommand() { lastCommand = ""; };
+	void ShowInfo();
+	string GetInfo();
 private:
 	vector<shared_ptr<CharacterCard>> characterCards;
 	vector<shared_ptr<BuildingCard>> playedCards;
