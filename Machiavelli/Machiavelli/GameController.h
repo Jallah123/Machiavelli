@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "Player.hpp"
 #include "Card.h"
+#include "Machiavelli.h"
 
 class GameController
 {

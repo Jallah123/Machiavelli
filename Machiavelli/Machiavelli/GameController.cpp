@@ -64,10 +64,11 @@ void GameController::ChooseCharacters()
 	// Discard random card
 	auto& card = RandomCard(characterCards);
 	card->Discard();
-	CurrentPlayer->GetSocket().write("Game discarded: " + card->GetName() + "\r\n");
+	CurrentPlayer->GetSocket().write("\r\nDiscarded card: " + card->GetName() + " \r\n");
 
 	// Let king pick a character
 	CurrentPlayer->ChooseCharacter();
+	CurrentPlayer->GetSocket().write("Waiting for opponent to choose and discard a character.\r\n");
 	CurrentPlayer = GetOtherPlayer(CurrentPlayer);
 
 	// Let others choose
@@ -76,6 +77,7 @@ void GameController::ChooseCharacters()
 	{		
 		CurrentPlayer->ChooseCharacter();
 		CurrentPlayer->DiscardCharacter();
+		CurrentPlayer->GetSocket().write("Waiting for opponent to choose and discard a character.\r\n");
 		CurrentPlayer = GetOtherPlayer(CurrentPlayer);
 		int count = 0;
 		for (auto& character: characterCards)
@@ -101,7 +103,14 @@ void GameController::StartGame()
 	currentState = RUNNING;
 	while (currentState == RUNNING)
 	{
-
+		for each (auto character in characterCards)
+		{
+			if (!character->IsDiscarded() && character->IsAlive())
+			{
+				character->BeginTurn();
+				character->PlayTurn();
+			}
+		}
 	}
 }
 
