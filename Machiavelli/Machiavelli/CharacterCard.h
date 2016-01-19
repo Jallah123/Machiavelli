@@ -16,12 +16,16 @@ public:
 		color = _color;
 		game = _game;
 	}
-	virtual void BeginTurn() = 0;
+	virtual void BeginTurn();
+	void PlayTurn();
+	void EndTurn();
 	virtual void Action() = 0;
 	void GetGoldForBuildings();
 	void SetOwner(shared_ptr<Player> p) { owner = p; };
 	shared_ptr<Player> GetOwner() { return owner; };
 	int GetId() { return id; };
+	void GetTurnGold();
+	void GetTurnBuildings();
 	void Kill() { alive = false; };
 	void Rob() { robbed = true; };
 	void Discard() { discarded = true; };
@@ -34,6 +38,7 @@ protected:
 	bool robbed = false;
 	bool ActionDone = false;
 	bool GoldReceived = false;
+	bool TurnBenefit = false;
 	bool discarded = false; 
 	int maxBuildings = 1;
 	shared_ptr<Player> owner = nullptr;
