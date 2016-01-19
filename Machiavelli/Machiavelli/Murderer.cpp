@@ -4,26 +4,27 @@
 #include "Socket.h"
 #include <string>
 #include "CharacterCard.h"
+#include "SocketUtil.h"
 
 void Murderer::Action()
 {
 	// conversatie/kiezen
 	auto& socket = owner.get()->GetSocket();
-	int number = -1;
-	while (number == -1 && number < game->getCharacters().size() && number > 1) {
-		socket.write("Choose number you want to kill.");
-		auto t = game->getCharacters();
-		for each (auto& character in t)
-		{
-			socket.write(character->GetId() + ". " + stoi(character->GetName()));
-		}
-		string line = owner.get()->GetSocket().readline();
-		if (line == "cancel")
-		{
-			return;
-		}
-		number = stoi(line);
+
+	socket.write("Choose number you want to kill.");
+
+	for each (auto& character in game->getCharacters())
+	{
+		socket.write(character->GetId() + ". " + stoi(character->GetName()));
 	}
+
+	int number = SocketUtil::GetNumber(owner, 8);
+
+	if (number == -1)
+	{
+		return;
+	}
+	
 	game->getCharacters().at(number)->Kill();
 	ActionDone = true;
 }
