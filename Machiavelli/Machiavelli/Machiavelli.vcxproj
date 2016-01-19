@@ -176,6 +176,7 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="King.h" />
+    <ClInclude Include="Machiavelli.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Merchant.h" />
     <ClInclude Include="Murderer.h" />

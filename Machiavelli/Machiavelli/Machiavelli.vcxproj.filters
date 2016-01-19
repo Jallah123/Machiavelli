@@ -170,6 +170,9 @@
     <ClInclude Include="Warlord.h">
       <Filter>Header Files\Models\Characters</Filter>
     </ClInclude>
+    <ClInclude Include="Machiavelli.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="characters.txt">

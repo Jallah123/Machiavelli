@@ -21,11 +21,7 @@ using namespace std;
 #include "Sync_queue.h"
 #include "ClientCommand.h"
 #include "Player.hpp"
-
-namespace machiavelli {
-	const int tcp_port{ 1080 };
-	const string prompt{ "machiavelli> " };
-}
+#include "Machiavelli.h"
 
 static Sync_queue<ClientCommand> queue;
 
@@ -50,11 +46,15 @@ shared_ptr<Player> initializeNewPlayer(shared_ptr<Socket> client, shared_ptr<Gam
 		try
 		{
 			Utility::split(date, '-', splittedDate);
+			if (splittedDate.size() != 3)
+			{
+				throw exception("");
+			}
 			day = stoi(splittedDate[0]);
 			month = stoi(splittedDate[1]);
 			year = stoi(splittedDate[2]);
 		}
-		catch (const std::exception&)
+		catch (...)
 		{
 			*client << "Birthday not correct please try again. (dd-mm-yyyy)\r\n";
 		}
@@ -84,14 +84,16 @@ void consume_command() // runs in its own thread
 			catch (const exception& ex)
 			{
 				cerr << "*** exception in consumer thread for player " << player->getName() << ": " << ex.what() << '\n';
-				if (client->is_open()) {
+				if (client->is_open()) 
+				{
 					client->write("Sorry, something went wrong during handling of your request.\r\n");
 				}
 			}
 			catch (...)
 			{
 				cerr << "*** exception in consumer thread for player " << player->getName() << '\n';
-				if (client->is_open()) {
+				if (client->is_open()) 
+				{
 					client->write("Sorry, something went wrong during handling of your request.\r\n");
 				}
 			}
@@ -184,7 +186,6 @@ int main(int argc, const char * argv[])
 					if (gameController->GetKing() == nullptr)
 					{
 						gameController->SetKing();
-						gameController->GetKing()->GetSocket().write("Choose a card.");
 						gameController->ChooseCharacters();
 						gameController->GiveStartingResources();
 					}
