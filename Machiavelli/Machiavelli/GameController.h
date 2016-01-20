@@ -25,8 +25,11 @@ public:
 	void SetKing() { King = NewKing; CurrentPlayer = King; };
 	shared_ptr<Player> GetKing() { return King; };
 	void StartGame();
+	shared_ptr<Player> GetSharedPlayer(Player& p);
+	void Finish(shared_ptr<Player> player);
 private:
 	void ShowScore();
+	void WriteToAll(string s);
 	vector<shared_ptr<CharacterCard>> characterCards;
 	vector<shared_ptr<BuildingCard>> buildingCards;
 	void createCharacterCards();
@@ -37,6 +40,7 @@ private:
 	shared_ptr<Player> NewKing = nullptr;
 	shared_ptr<Player> CurrentPlayer = nullptr;
 	shared_ptr<Player> GetOldestPlayer();
+	shared_ptr<Player> FirstWith8Buildings = nullptr;
 	shared_ptr<BuildingCard> RandomCard(vector<shared_ptr<BuildingCard>> cards);
 	shared_ptr<CharacterCard> RandomCard(vector<shared_ptr<CharacterCard>> cards);
 };

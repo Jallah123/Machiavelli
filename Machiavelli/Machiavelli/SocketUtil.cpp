@@ -22,6 +22,11 @@ int SocketUtil::GetNumber(shared_ptr<Player> player, int max, int min)
 					player->ResetLastCommand();
 					return number;
 				}
+				else 
+				{
+					player->GetSocket().write("Number not in range.\r\n");
+					player->GetSocket().write(machiavelli::prompt);
+				}
 			}
 			catch (...)
 			{

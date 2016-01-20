@@ -18,6 +18,7 @@ public:
 		}
 		return "No such color.";
 	};
+	ColorEnum GetColorEnum() { return color; };
 protected:
 	string name;
 	ColorEnum color;

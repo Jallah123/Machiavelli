@@ -10,6 +10,7 @@
 #include <algorithm>
 #include "GameController.h"
 #include "CharacterCard.h"
+#include "SocketUtil.h"
 
 using namespace std;
 
@@ -43,47 +44,34 @@ void Player::DiscardCharacter()
 			socket->write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
 		}
 	}
-	socket->write(machiavelli::prompt);
-	bool done = false;
-	while (!done)
+	bool running = true;
+	while (running)
 	{
-		if (lastCommand != "")
+		int choice = SocketUtil::GetNumber(game->GetSharedPlayer(*this), characters.size());
+		for (auto& character : characters)
 		{
-			try
+			if (character->GetId() == choice)
 			{
-				int choice = stoi(lastCommand);
-				for (auto& character : characters)
+				if (!character->IsDiscarded() && character->GetOwner() == nullptr)
 				{
-					if (character->GetId() == choice)
-					{
-						if (!character->IsDiscarded() && character->GetOwner() == nullptr)
-						{
-							character->Discard();
-							done = true;
-							break;
-						}
-						else
-						{
-							socket->write("Character already chosen or discarded.\r\n");
-							socket->write(machiavelli::prompt);
-						}
-					}
+					character->Discard();
+					running = false;
+					break;
+				}
+				else
+				{
+					socket->write("Character already chosen or discarded.\r\n");
 				}
 			}
-			catch (...)
-			{
-				socket->write("Wrong number...\r\n");
-				socket->write(machiavelli::prompt);
-			}
-			ResetLastCommand();
 		}
 	}
+	ResetLastCommand();
 }
 
 void Player::ShowInfo()
 {
 	socket->write("Goud : " + to_string(gold) + "\r\n");
-	
+
 	socket->write("Gebouwen : \r\n");
 	for (auto& building : playedCards)
 	{
@@ -111,6 +99,8 @@ string Player::GetInfo()
 	return s;
 }
 
+
+
 void Player::ChooseCharacter()
 {
 	vector<shared_ptr<CharacterCard>> characters = game->getCharacters();
@@ -122,40 +112,28 @@ void Player::ChooseCharacter()
 			socket->write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
 		}
 	}
-	socket->write(machiavelli::prompt);
-	bool done = false;
-	while (!done)
+	bool running = true;
+	while (running)
 	{
-		if (lastCommand != "")
+		int choice = SocketUtil::GetNumber(game->GetSharedPlayer(*this), characters.size());
+		for (auto& character : characters)
 		{
-			try
+			if (character->GetId() == choice)
 			{
-				int choice = stoi(lastCommand);
-				for (auto& character : characters)
+				if (!character->IsDiscarded() && character->GetOwner() == nullptr)
 				{
-					if (character->GetId() == choice)
-					{
-						if (!character->IsDiscarded() && character->GetOwner() == nullptr)
-						{
-							characterCards.push_back(character);
-							character->SetOwner(shared_ptr<Player>(this));
-							done = true;
-						}
-						else
-						{
-							socket->write("Character already chosen or discarded.\r\n");
-							socket->write(machiavelli::prompt);
-						}
-					}
+					characterCards.push_back(character);
+					character->SetOwner(game->GetSharedPlayer(*this));
+					running = false;
+					break;
+				}
+				else
+				{
+					socket->write("Character already chosen or discarded.\r\n");
 				}
 			}
-			catch (...)
-			{
-				socket->write("Wrong number...\r\n");
-				socket->write(machiavelli::prompt);
-			}
-			ResetLastCommand();
 		}
 	}
+	ResetLastCommand();
 	socket->write("Waiting for other player ");
 }

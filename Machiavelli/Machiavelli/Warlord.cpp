@@ -5,7 +5,6 @@
 
 void Warlord::Action()
 {
-	GetGoldForBuildings();
 	auto& socket = owner->GetSocket();
 	auto& p = game->GetOtherPlayer(owner);
 	for (auto& character : p->GetCharacterCards())
@@ -18,16 +17,16 @@ void Warlord::Action()
 			return;
 		}
 	}
-	socket.write("Building:\n");
+	socket.write("Building:\r\n");
 
 	for (size_t i = 0; i < p->GetPlayedCards().size(); i++)
 	{
-		socket.write(to_string(i) + ". " + p->GetPlayedCards().at(i)->GetName() + " price: " + to_string(p->GetPlayedCards().at(i)->GetCost() - 1) + '\n');
+		socket.write(to_string(i) + ". " + p->GetPlayedCards().at(i)->GetName() + " price: " + to_string(p->GetPlayedCards().at(i)->GetCost() - 1) + "\r\n");
 	}
 
 	int number = -1;
 
-	socket.write("Which building do you want to destroy?(cancel to return):\n");
+	socket.write("Which building do you want to destroy?(cancel to return):\r\n");
 	number = SocketUtil::GetNumber(owner, p->GetPlayedCards().size() - 1);
 
 	if (number == -1)
@@ -37,12 +36,12 @@ void Warlord::Action()
 
 	if (owner->GetGold() >= p->GetPlayedCards().at(number)->GetCost() - 1)
 	{
-		p->DestroyBuilding(p->GetPlayedCards().at(number));
 		owner->RemoveGold(p->GetPlayedCards().at(number)->GetCost() - 1);
+		p->DestroyBuilding(p->GetPlayedCards().at(number));
 	}
 	else
 	{
-		socket.write("Too expensive.");
+		socket.write("Too expensive.\r\n");
 		return;
 	}
 

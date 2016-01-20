@@ -77,8 +77,6 @@ void consume_command() // runs in its own thread
 			shared_ptr<Player> player{ command.get_player() };
 			try
 			{
-				// TODO handle command here
-				//*client << player->getName() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
 				player->SetLastCommand(command.get_cmd());
 			}
 			catch (const exception& ex)

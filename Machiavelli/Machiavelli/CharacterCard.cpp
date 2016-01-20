@@ -26,48 +26,43 @@ void CharacterCard::PlayTurn()
 	int amountOfChoices;
 	ShowActions(amountOfChoices);
 	auto& socket = owner->GetSocket();
-	socket.write(machiavelli::prompt);
 	while (true)
 	{
-		if (owner->GetLastCommand() != "")
+		int choice = SocketUtil::GetNumber(owner, amountOfChoices);
+		owner->ResetLastCommand();
+
+		switch (choice)
 		{
-			int choice = SocketUtil::GetNumber(owner, 6);
-			owner->ResetLastCommand();
-			if (choice >= 0 && choice <= amountOfChoices)
+		case 0:
+			socket.write(game->GetOtherPlayer(owner)->GetInfo());
+			break;
+		case 1:
+			GetTurnGold();
+			break;
+		case 2:
+			GetTurnBuildings();
+			break;
+		case 3:
+			BuildBuilding();
+			break;
+		case 4:
+			if (ActionDone)
 			{
-				switch (choice)
-				{
-				case 0:
-					socket.write(game->GetOtherPlayer(owner)->GetInfo());
-					break;
-				case 1:
-					GetTurnGold();
-					break;
-				case 2:
-					GetTurnBuildings();
-					break;
-				case 3:
-					BuildBuilding();
-					break;
-				case 4:
-					if (ActionDone)
-					{
-						socket.write("Je hebt je actie al uitgevoerd.");
-						break;
-					}
-					Action();
-					break;
-				case 5:
-					return;
-				case 6:
-					GetGoldForBuildings();
-					break;
-				}
-				ShowActions(amountOfChoices);
-				owner->ResetLastCommand();
+				socket.write("Je hebt je actie al uitgevoerd.");
+				break;
 			}
-			socket.write(machiavelli::prompt);
+			Action();
+			break;
+		case 5:
+			return;
+		case 6:
+			GetGoldForBuildings();
+			break;
 		}
+		ShowActions(amountOfChoices);
+		owner->ResetLastCommand();
+
+		socket.write(machiavelli::prompt);
 	}
 }
 
@@ -90,14 +85,14 @@ void CharacterCard::BuildBuilding()
 	owner->BuildBuilding(card);
 	if (owner->GetPlayedCards().size() == 8)
 	{
-		game->setState(FINISHED);
+		game->Finish(owner);
 	}
 }
 
 void CharacterCard::ShowActions(int& amountOfChoices)
 {
 	auto& socket = owner->GetSocket();
-	socket.write("\u001B[2J");
+	socket.write("\r\n\r\n\r\n");
 	socket.write("Je bent nu de : " + name + "\r\n");
 	owner->ShowInfo();
 	socket.write("Maak een keuze : \r\n");
@@ -129,7 +124,6 @@ void CharacterCard::GetTurnBuildings()
 	socket.write("Kies 1 van de 2 volgende : \r\n");
 	socket.write("0. " + card1->GetInfo());
 	socket.write("1. " + card2->GetInfo());
-	socket.write(machiavelli::prompt);
 
 	int choice = SocketUtil::GetNumber(owner, 1);
 	if (choice == 0)

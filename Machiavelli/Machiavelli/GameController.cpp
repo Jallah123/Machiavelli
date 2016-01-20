@@ -124,9 +124,67 @@ void GameController::StartGame()
 	}
 }
 
+shared_ptr<Player> GameController::GetSharedPlayer(Player& p)
+{
+	for (auto player: players)
+	{
+		if (player.get() == &p)
+		{
+			return player;
+		}
+	}
+}
+
+void GameController::Finish(shared_ptr<Player> player)
+{
+	currentState = FINISHED;
+	if (FirstWith8Buildings == nullptr)
+	{
+		FirstWith8Buildings = player;
+	}
+}
+
 void GameController::ShowScore()
 {
+	for (auto& player: players)
+	{
+		vector<ColorEnum> colors{};
+		int total = 0;
+		int pointsForBuildings = 0;
+		WriteToAll("Game ended.\r\n");
+		WriteToAll(player->getName() + "'s score:\r\n");
+		for each (auto building in player->GetPlayedCards())
+		{
+			pointsForBuildings += building->GetCost();
+			if (find(colors.begin(), colors.end(), building->GetColorEnum()) == colors.end()) colors.push_back(building->GetColorEnum());
+		}
+		total += pointsForBuildings;
+		WriteToAll("Points for buildings: " + to_string(pointsForBuildings) + "\r\n");
+		if (player == FirstWith8Buildings)
+		{
+			WriteToAll("Points for being first with 8 buildings: 4\r\n");
+			total += 4;
+		}
+		else if(player->GetPlayedCards().size() == 8) 
+		{
+			WriteToAll("Points for having 8 buildings: 2\r\n");
+			total += 2;
+		}
+		if (colors.size() == 4) 
+		{
+			WriteToAll("Points for having all building colors: 3\r\n");
+			total += 3;
+		}
+		WriteToAll("Total points: " + to_string(total) + + "\r\n");
+	}
+}
 
+void GameController::WriteToAll(string s)
+{
+	for (auto& player: players)
+	{
+		player->GetSocket().write(s);
+	}
 }
 
 void GameController::HandleCommand(shared_ptr<Player> player, string cmd)
