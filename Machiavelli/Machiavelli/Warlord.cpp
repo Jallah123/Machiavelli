@@ -1,6 +1,7 @@
 #include "Warlord.h"
 #include "Player.hpp"
 #include "GameController.h"
+#include "SocketUtil.h"
 
 void Warlord::Action()
 {
@@ -15,27 +16,24 @@ void Warlord::Action()
 	}
 
 	int number = -1;
-	while (number == -1)
+	while (true)
 	{
 		socket.write("Which building do you want to destroy?(cancel to return):\n");
-		string line = socket.readline();
-		if (line == "cancel")
+		number = SocketUtil::GetNumber(owner, p->GetPlayedCards().size() - 1);
+
+		if (number == -1)
 		{
 			return;
 		}
-		int number = stoi(line);
-		
-		if (number < p->GetPlayedCards().size() && number >= 0)
+		if (p->GetGold() >= p->GetPlayedCards().at(number)->GetCost() - 1)
 		{
-			if (p->GetGold() >= p->GetPlayedCards().at(number)->GetCost() - 1)
-			{
-				p->DestroyBuilding(p->GetPlayedCards().at(number));
-				p->RemoveGold(p->GetPlayedCards().at(number)->GetCost() - 1);
-			}
-			else {
-				socket.write("Too expensive.");
-				return;
-			}
+			p->DestroyBuilding(p->GetPlayedCards().at(number));
+			p->RemoveGold(p->GetPlayedCards().at(number)->GetCost() - 1);
+		}
+		else 
+		{
+			socket.write("Too expensive.");
+			return;
 		}
 	}
 	ActionDone = true;

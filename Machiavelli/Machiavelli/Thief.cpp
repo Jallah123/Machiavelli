@@ -3,6 +3,7 @@
 #include "GameController.h"
 #include "Socket.h"
 #include <string>
+#include "SocketUtil.h"
 
 void Thief::Action()
 {
@@ -15,21 +16,13 @@ void Thief::Action()
 		{
 			socket.write(character->GetId() + ". " + stoi(character->GetName()));
 		}
-		socket.write(machiavelli::prompt);
-		string line = owner->GetLastCommand();
-		if (line == "cancel")
+		int number = SocketUtil::GetNumber(owner, 8, 3);
+
+		if (number == -1)
 		{
 			return;
 		}
-		try
-		{
-			number = stoi(line);
-		}
-		catch (...)
-		{
-			socket.write("Je hebt geen nummer gekozen.\r\n");
-		}
-		if (number > 2 && number < game->getCharacters().size())
+		else 
 		{
 			break;
 		}

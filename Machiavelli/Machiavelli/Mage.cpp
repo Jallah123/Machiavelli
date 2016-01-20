@@ -4,6 +4,7 @@
 #include "Socket.h"
 #include "Utility.h"
 #include <string>
+#include "SocketUtil.h"
 
 void Mage::Action()
 {
@@ -14,16 +15,11 @@ void Mage::Action()
 		socket.write("You have no cards in your hand, automatically swapping with other player.");
 		SwapCards();
 	}
-	// While number is not in range of 1-2
-	while (!(number >= 1 && number <= 2))
+	number = SocketUtil::GetNumber(owner, 2, 1);
+
+	if (number == -1)
 	{
-		socket.write("Choose:\n1. Trade hand with other player.\n2. Discard cards and get new ones.");
-		string line = socket.readline();
-		if (line == "cancel")
-		{
-			return;
-		}
-		number = stoi(line);
+		return;
 	}
 	if (number == 1)
 	{

@@ -13,7 +13,7 @@ void Murderer::Action()
 
 	socket.write("Choose number you want to kill.");
 
-	for each (auto& character in game->getCharacters())
+	for (auto& character : game->getCharacters())
 	{
 		socket.write(character->GetId() + ". " + stoi(character->GetName()));
 	}

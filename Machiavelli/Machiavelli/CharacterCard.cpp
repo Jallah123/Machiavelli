@@ -47,11 +47,15 @@ void CharacterCard::PlayTurn()
 						GetTurnBuildings();
 						break;
 					case 3:
-						Action();
+						// TODO get building 
+						//owner->BuildBuilding();
 						break;
 					case 4:
-						return;
+						Action();
+						break;
 					case 5:
+						return;
+					case 6:
 						GetGoldForBuildings();
 						break;
 					}
@@ -77,12 +81,13 @@ void CharacterCard::ShowActions(int& amountOfChoices)
 	socket.write("0. Bekijk goud en gebouwen van de tegenstander.\r\n");
 	socket.write("1. Neem 2 goudstukken.\r\n");
 	socket.write("2. Neem 2 gebouwenkaarten en leg er 1 af.\r\n");
-	socket.write("3. Maak gebruik van de karaktereigenschap van de " + name + ".\r\n");
-	socket.write("4. Beeindig je beurt.\r\n");
+	socket.write("3. Bouw een gebouw.\r\n");
+	socket.write("4. Maak gebruik van de karaktereigenschap van de " + name + ".\r\n");
+	socket.write("5. Beeindig je beurt.\r\n");
 	amountOfChoices = 4;
 	if (color != ColorEnum::NONE)
 	{
-		socket.write("5. Ontvang goudstukken voor gekleurde gebouwen.\r\n");
+		socket.write("6. Ontvang goudstukken voor gekleurde gebouwen.\r\n");
 		amountOfChoices++;
 	}
 }
