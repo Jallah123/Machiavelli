@@ -10,14 +10,16 @@ int SocketUtil::GetNumber(shared_ptr<Player> player, int max, int min)
 	}
 	int number = -1;
 	player->GetSocket().write(machiavelli::prompt);
+	player->ResetLastCommand();
 	while (true)
 	{
 		if (player->GetLastCommand() != "") {
-			try 
+			try
 			{
 				number = stoi(player->GetLastCommand());
 				if (number <= max && number >= min)
 				{
+					player->ResetLastCommand();
 					return number;
 				}
 			}
@@ -26,13 +28,13 @@ int SocketUtil::GetNumber(shared_ptr<Player> player, int max, int min)
 				player->GetSocket().write("Niet een geldig nummer.\r\n");
 				player->GetSocket().write(machiavelli::prompt);
 			}
+			player->ResetLastCommand();
 		}
 		if (player->GetLastCommand() == "cancel")
 		{
+			player->ResetLastCommand();
 			return -1;
 		}
-		player->ResetLastCommand();
-		player->GetSocket().write(machiavelli::prompt);
 	}
 }
 

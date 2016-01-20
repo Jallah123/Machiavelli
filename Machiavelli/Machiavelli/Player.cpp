@@ -27,11 +27,6 @@ void Player::DeleteFromHand(vector<shared_ptr<BuildingCard>> cards)
 
 void Player::BuildBuilding(shared_ptr<BuildingCard> building)
 {
-	if (building->GetCost() > GetGold())
-	{
-		GetSocket().write("Not enough money.");
-		return;
-	}
 	RemoveGold(building->GetCost());
 	playedCards.push_back(building);
 	handCards.erase(find(handCards.begin(), handCards.end(), building));
@@ -75,7 +70,7 @@ void Player::DiscardCharacter()
 					}
 				}
 			}
-			catch (exception& e)
+			catch (...)
 			{
 				socket->write("Wrong number...\r\n");
 				socket->write(machiavelli::prompt);
@@ -154,7 +149,7 @@ void Player::ChooseCharacter()
 					}
 				}
 			}
-			catch (exception& e)
+			catch (...)
 			{
 				socket->write("Wrong number...\r\n");
 				socket->write(machiavelli::prompt);

@@ -8,25 +8,23 @@
 void Thief::Action()
 {
 	auto& socket = owner.get()->GetSocket();
-	int number = -1;
-	while (true) {
-		socket.write("Choose number you want to rob.\r\n");
-		auto t = game->getCharacters();
-		for each (auto& character in t)
-		{
-			socket.write(character->GetId() + ". " + stoi(character->GetName()));
-		}
-		int number = SocketUtil::GetNumber(owner, 8, 3);
 
-		if (number == -1)
+	socket.write("Choose number you want to rob.\r\n");
+	auto t = game->getCharacters();
+	for each (auto& character in t)
+	{
+		if (character->GetId() > 2) 
 		{
-			return;
-		}
-		else 
-		{
-			break;
+			socket.write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
 		}
 	}
-	game->getCharacters().at(number)->Rob();
+	int number = SocketUtil::GetNumber(owner, 8, 3);
+
+	if (number == -1)
+	{
+		return;
+	}
+
+	game->getCharacters().at(number - 1)->Rob();
 	ActionDone = true;
 }

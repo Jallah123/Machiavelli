@@ -15,16 +15,20 @@ void Murderer::Action()
 
 	for (auto& character : game->getCharacters())
 	{
-		socket.write(character->GetId() + ". " + stoi(character->GetName()));
+		if (character->GetId() != 1)
+		{
+			socket.write(to_string(character->GetId()) + ". " + character->GetName() + "\r\n");
+		}
 	}
 
-	int number = SocketUtil::GetNumber(owner, 8);
+	int number = SocketUtil::GetNumber(owner, game->getCharacters().size(), 2);
 
 	if (number == -1)
 	{
 		return;
 	}
-	
-	game->getCharacters().at(number)->Kill();
+
+	game->getCharacters().at(number - 1)->Kill();
 	ActionDone = true;
+	owner->ResetLastCommand();
 }

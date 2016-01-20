@@ -14,9 +14,12 @@ void Mage::Action()
 	{
 		socket.write("You have no cards in your hand, automatically swapping with other player.");
 		SwapCards();
+		return;
 	}
+	socket.write("Do you want to switch cards with another player or the bank?\r\n");
+	socket.write("1. other player\r\n");
+	socket.write("2. bank\r\n");
 	number = SocketUtil::GetNumber(owner, 2, 1);
-
 	if (number == -1)
 	{
 		return;
@@ -35,7 +38,7 @@ void Mage::Action()
 void Mage::SwapCards()
 {
 	auto& other = game->GetOtherPlayer(owner);
-	swap(other->GetHand(), owner->GetHand());
+	other->GetHand().swap(owner->GetHand());
 }
 
 void Mage::DiscardCards()
@@ -45,15 +48,19 @@ void Mage::DiscardCards()
 	int amountCardsInHand = owner->GetHand().size();
 	// While number is not in range of 1-2
 
-	socket.write("You hand:\n");
+	socket.write("Your hand:\r\n");
 	int i = 0;
 	for each (auto& card in owner->GetHand())
 	{
-		socket.write(to_string(i++) + card->GetName() + " " + card->GetColor() + '\n');
+		socket.write(to_string(i++) + ". " + card->GetName() + " " + card->GetColor() + "\r\n");
 	}
 
-	socket.write("\nPlease enter the cards you want to discard. (2,3,6)\n");
-	string line = socket.readline();
+	socket.write("\nPlease enter the cards you want to discard. (2,3,6)\r\n");
+	while(owner->GetLastCommand() == "")
+	{
+	
+	}
+	string line = owner->GetLastCommand();
 	if (line == "cancel")
 	{
 		return;

@@ -4,6 +4,8 @@
 
 class Player;
 class GameController;
+class BuildingCard;
+
 class CharacterCard :
 	public Card
 {
@@ -19,10 +21,9 @@ public:
 	virtual void BeginTurn();
 	void PlayTurn();
 	void ShowActions(int& amountOfChoices);
-	void EndTurn();
 	virtual void Action() = 0;
 	void GetGoldForBuildings();
-	void SetOwner(shared_ptr<Player> p) { owner = p; };
+	virtual void SetOwner(shared_ptr<Player> p) { owner = p; };
 	shared_ptr<Player> GetOwner() { return owner; };
 	int GetId() { return id; };
 	void GetTurnGold();
@@ -33,6 +34,7 @@ public:
 	bool IsAlive() { return alive; };
 	bool IsRobbed() { return robbed; };
 	bool IsDiscarded() { return discarded; };
+	void Reset();
 protected:
 	int id;
 	bool alive = true;
@@ -42,7 +44,9 @@ protected:
 	bool TurnBenefit = false;
 	bool discarded = false; 
 	int maxBuildings = 1;
+	int buildBuildings = 0;
 	shared_ptr<Player> owner = nullptr;
-	shared_ptr<GameController> game;
+	shared_ptr<GameController> game = nullptr;
+	void BuildBuilding();
 };
 

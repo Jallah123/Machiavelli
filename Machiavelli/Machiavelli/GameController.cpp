@@ -45,6 +45,7 @@ shared_ptr<Player> GameController::GetOtherPlayer(shared_ptr<Player> self)
 		if (player != self)
 			return player;
 	}
+	return nullptr;
 }
 
 void GameController::GiveStartingResources()
@@ -61,6 +62,10 @@ void GameController::GiveStartingResources()
 
 void GameController::ChooseCharacters()
 {
+	for (auto& character: characterCards)
+	{
+		character->Reset();
+	}
 	// Discard random card
 	CurrentPlayer->GetSocket().write("\u001B[2J");
 	auto& card = RandomCard(characterCards);
@@ -75,13 +80,13 @@ void GameController::ChooseCharacters()
 	// Let others choose
 	bool done = false;
 	while (!done)
-	{		
+	{
 		CurrentPlayer->ChooseCharacter();
 		CurrentPlayer->DiscardCharacter();
 		CurrentPlayer->GetSocket().write("Waiting for opponent to choose and discard a character.\r\n");
 		CurrentPlayer = GetOtherPlayer(CurrentPlayer);
 		int count = 0;
-		for (auto& character: characterCards)
+		for (auto& character : characterCards)
 		{
 			if (character->IsDiscarded() || character->GetOwner() != nullptr)
 			{
@@ -93,18 +98,18 @@ void GameController::ChooseCharacters()
 			done = true;
 		}
 	}
-
-	// Picking cards is done, give starting resources
-	GiveStartingResources();
-	StartGame();
 }
 
 void GameController::StartGame()
 {
+	SetNewKing(GetOldestPlayer());
+	GiveStartingResources();
 	currentState = RUNNING;
 	while (currentState == RUNNING)
 	{
-		for each (auto character in characterCards)
+		SetKing();
+		ChooseCharacters();
+		for(auto& character : characterCards)
 		{
 			if (!character->IsDiscarded() && character->IsAlive())
 			{
@@ -113,6 +118,15 @@ void GameController::StartGame()
 			}
 		}
 	}
+	if (currentState == FINISHED)
+	{
+		ShowScore();
+	}
+}
+
+void GameController::ShowScore()
+{
+
 }
 
 void GameController::HandleCommand(shared_ptr<Player> player, string cmd)
@@ -132,9 +146,9 @@ void GameController::SwapCards(shared_ptr<Player> p, vector<shared_ptr<BuildingC
 		newCards.push_back(TakeCard());
 	}
 
-	for each (auto card in cards)
+	for(auto& card : newCards)
 	{
-		buildingCards.push_back(card);
+		p->AddCardToHand(card);
 	}
 }
 
@@ -154,7 +168,7 @@ shared_ptr<BuildingCard> GameController::TakeCard()
 	return card;
 }
 
-shared_ptr<CharacterCard> GameController::chooseCharacterCard(int card)
+shared_ptr<CharacterCard> GameController::chooseCharacterCard(size_t card)
 {
 	if (card >= 0 && card < characterCards.size())
 	{

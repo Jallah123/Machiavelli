@@ -2,12 +2,13 @@
 #include "Player.hpp"
 #include "GameController.h"
 #include "Machiavelli.h"
+#include "SocketUtil.h"
 
 void CharacterCard::BeginTurn()
 {
 	if (robbed)
 	{
-		for(auto& character : game->getCharacters())
+		for (auto& character : game->getCharacters())
 		{
 			// get thief
 			if (character->GetId() == 2)
@@ -30,51 +31,73 @@ void CharacterCard::PlayTurn()
 	{
 		if (owner->GetLastCommand() != "")
 		{
-			try {
-				int choice = stoi(owner->GetLastCommand());
-				owner->ResetLastCommand();
-				if (choice >= 0 && choice <= amountOfChoices)
+			int choice = SocketUtil::GetNumber(owner, 6);
+			owner->ResetLastCommand();
+			if (choice >= 0 && choice <= amountOfChoices)
+			{
+				switch (choice)
 				{
-					switch (choice)
+				case 0:
+					socket.write(game->GetOtherPlayer(owner)->GetInfo());
+					break;
+				case 1:
+					GetTurnGold();
+					break;
+				case 2:
+					GetTurnBuildings();
+					break;
+				case 3:
+					BuildBuilding();
+					break;
+				case 4:
+					if (ActionDone)
 					{
-					case 0:
-						socket.write(game->GetOtherPlayer(owner)->GetInfo());
-						break;
-					case 1:
-						GetTurnGold();
-						break;
-					case 2:
-						GetTurnBuildings();
-						break;
-					case 3:
-						// TODO get building 
-						//owner->BuildBuilding();
-						break;
-					case 4:
-						Action();
-						break;
-					case 5:
-						return;
-					case 6:
-						GetGoldForBuildings();
+						socket.write("Je hebt je actie al uitgevoerd.");
 						break;
 					}
-					ShowActions(amountOfChoices);
+					Action();
+					break;
+				case 5:
+					return;
+				case 6:
+					GetGoldForBuildings();
+					break;
 				}
-			}
-			catch (...)
-			{
-				socket.write("Wrong number.\r\n");
-				socket.write(machiavelli::prompt);
+				ShowActions(amountOfChoices);
+				owner->ResetLastCommand();
 			}
 			socket.write(machiavelli::prompt);
 		}
 	}
 }
 
+void CharacterCard::BuildBuilding()
+{
+	auto& socket = owner->GetSocket();
+	int index = 0;
+	for (auto& building : owner->GetHand())
+	{
+		socket.write(to_string(index) + ". " + building->GetInfo());
+		index++;
+	}
+	int choice = SocketUtil::GetNumber(owner, index);
+	shared_ptr<BuildingCard> card = owner->GetHand().at(choice);
+	if (choice == -1 || card->GetCost() > owner->GetGold() || buildBuildings >= maxBuildings)
+	{
+		return;
+	}
+	buildBuildings++;
+	owner->BuildBuilding(card);
+	if (owner->GetPlayedCards().size() == 8)
+	{
+		game->setState(FINISHED);
+	}
+}
+
 void CharacterCard::ShowActions(int& amountOfChoices)
 {
 	auto& socket = owner->GetSocket();
+	socket.write("\u001B[2J");
 	socket.write("Je bent nu de : " + name + "\r\n");
 	owner->ShowInfo();
 	socket.write("Maak een keuze : \r\n");
@@ -84,7 +107,7 @@ void CharacterCard::ShowActions(int& amountOfChoices)
 	socket.write("3. Bouw een gebouw.\r\n");
 	socket.write("4. Maak gebruik van de karaktereigenschap van de " + name + ".\r\n");
 	socket.write("5. Beeindig je beurt.\r\n");
-	amountOfChoices = 4;
+	amountOfChoices = 5;
 	if (color != ColorEnum::NONE)
 	{
 		socket.write("6. Ontvang goudstukken voor gekleurde gebouwen.\r\n");
@@ -107,33 +130,33 @@ void CharacterCard::GetTurnBuildings()
 	socket.write("0. " + card1->GetInfo());
 	socket.write("1. " + card2->GetInfo());
 	socket.write(machiavelli::prompt);
-	while (true)
+
+	int choice = SocketUtil::GetNumber(owner, 1);
+	if (choice == 0)
 	{
-		try {
-			if (owner->GetLastCommand() != "") {
-				int choice = stoi(owner->GetLastCommand());
-				if (choice == 0)
-				{
-					owner->AddCardToHand(card1);
-				}
-				else if (choice == 1)
-				{
-					owner->AddCardToHand(card2);
-				}
-				else 
-				{
-					socket.write("Kies 0 of 1.\r\n");
-					socket.write(machiavelli::prompt);
-				}
-			}
-		}
-		catch (...)
-		{
-			socket.write("Wrong number.\r\n");
-			socket.write(machiavelli::prompt);
-		}
+		owner->AddCardToHand(card1);
 	}
+	else if (choice == 1)
+	{
+		owner->AddCardToHand(card2);
+	}
+
 	TurnBenefit = true;
+}
+
+void CharacterCard::Reset()
+{
+	alive = true;
+	robbed = false;
+	ActionDone = false;
+	GoldReceived = false;
+	TurnBenefit = false;
+	discarded = false;
+	buildBuildings = 0;
+	if (owner != nullptr)
+	{
+		owner = nullptr;
+	}
 }
 
 void CharacterCard::GetTurnGold()

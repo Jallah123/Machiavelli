@@ -103,7 +103,7 @@
       <Filter>Source Files\Models\Characters</Filter>
     </ClCompile>
     <ClCompile Include="SocketUtil.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

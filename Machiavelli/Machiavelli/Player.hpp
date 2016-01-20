@@ -31,7 +31,7 @@ public:
 	// Getters
 	vector<shared_ptr<CharacterCard>> GetCharacterCards() { return characterCards; };
 	vector<shared_ptr<BuildingCard>> GetPlayedCards() { return playedCards; };
-	vector<shared_ptr<BuildingCard>> GetHand() { return handCards; };
+	vector<shared_ptr<BuildingCard>>& GetHand() { return handCards; };
 	Socket& GetSocket() { return *socket.get(); };
 	tm getAge() { return age; };
 	string getName() const { return name; }

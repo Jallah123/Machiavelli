@@ -3,6 +3,7 @@
 
 void Merchant::BeginTurn()
 {
+	CharacterCard::BeginTurn();
 	owner->AddGold(1);
 }
 

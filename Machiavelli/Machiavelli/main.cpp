@@ -183,12 +183,7 @@ int main(int argc, const char * argv[])
 				}
 				while (gameController->getState() == SETUP)
 				{
-					if (gameController->GetKing() == nullptr)
-					{
-						gameController->SetKing();
-						gameController->ChooseCharacters();
-						gameController->GiveStartingResources();
-					}
+					gameController->StartGame();
 				}
 			}
 		}
